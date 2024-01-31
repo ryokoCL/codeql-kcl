@@ -1,7 +1,6 @@
 package com.kcl.extractor;
 
 import com.kcl.extractor.FileExtractor.FileType;
-import com.kcl.extractor.trapcache.DummyTrapCache;
 import com.kcl.extractor.trapcache.ITrapCache;
 import com.kcl.parser.ParseError;
 import com.semmle.util.data.StringUtil;
@@ -188,7 +187,6 @@ public class AutoBuild {
     private final Set<String> xmlExtensions = new LinkedHashSet<>();
     private final Path LGTM_SRC;
     private final String defaultEncoding;
-    private final Path projectPath;
     private final VirtualSourceRoot virtualSourceRoot;
     private ProjectLayout filters;
     private ExecutorService threadPool;
@@ -209,12 +207,19 @@ public class AutoBuild {
     };
 
     public AutoBuild() {
-        this.projectPath = Path.of(System.getProperty("user.dir")).resolve("data");
-        this.LGTM_SRC = toRealPath(projectPath.resolve("project"));
-        DefaultTrapWriterFactory defaultTrapWriterFactory = new DefaultTrapWriterFactory(projectPath.resolve("report").resolve("trap").toString());
-        DefaultSourceArchive defaultSourceArchive = new DefaultSourceArchive(projectPath.resolve("report").resolve("source").toString());
+        this.LGTM_SRC = toRealPath(getPathFromEnvVar("LGTM_SRC"));
+
+        String trapFolderEnvVar = "CODEQL_EXTRACTOR_KCL_TRAP_DIR";
+        String trapFolderPath = Env.systemEnv().getFirstNonEmpty(new String[]{trapFolderEnvVar, Env.Var.TRAP_FOLDER.name()});
+
+        String sourceArchiveEnvVar = "CODEQL_EXTRACTOR_KCL_SOURCE_ARCHIVE_DIR";
+        String sourceArchiveRoot = Env.systemEnv().getFirstNonEmpty(new String[]{sourceArchiveEnvVar, Env.Var.SOURCE_ARCHIVE.name()});
+
+        DefaultTrapWriterFactory defaultTrapWriterFactory = new DefaultTrapWriterFactory(trapFolderPath);
+        DefaultSourceArchive defaultSourceArchive = new DefaultSourceArchive(sourceArchiveRoot);
+
         this.outputConfig = new ExtractorOutputConfig(defaultTrapWriterFactory, defaultSourceArchive);
-        this.trapCache = new DummyTrapCache();
+        this.trapCache = ITrapCache.fromExtractorOptions();
         this.defaultEncoding = "utf8";
         this.virtualSourceRoot = makeVirtualSourceRoot();
         this.fileTypes.put(".k", FileType.KCL);
@@ -261,7 +266,7 @@ public class AutoBuild {
     }
 
     protected VirtualSourceRoot makeVirtualSourceRoot() {
-        return new VirtualSourceRoot(LGTM_SRC, projectPath.resolve("report").resolve("working"));
+        return new VirtualSourceRoot(LGTM_SRC, toRealPath(Paths.get(EnvironmentVariables.getScratchDir())));
     }
 
     private String getEnvVar(String envVarName) {

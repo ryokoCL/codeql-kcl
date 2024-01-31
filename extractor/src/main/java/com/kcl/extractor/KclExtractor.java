@@ -12,6 +12,7 @@ import com.semmle.util.trap.TrapWriter.Label;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class KclExtractor implements IExtractor {
             metrics.startPhase(ExtractionMetrics.ExtractionPhase.KclAstParser_parse);
             this.parseResult = KclAstParser.parse(Path.of(sourceFile));
             this.specResult = this.parseResult.getSpec();
-            Path jsonPath = Path.of(System.getProperty("user.dir")).resolve("data/report/extend/kcl.json");
+            Path jsonPath = Paths.get(EnvironmentVariables.getScratchDir()).resolve("kcl.json");
             FileUtil.write(jsonPath.toFile(), specResult.getProgram());
             metrics.stopPhase(ExtractionMetrics.ExtractionPhase.KclAstParser_parse);
 
