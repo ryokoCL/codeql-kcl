@@ -24,7 +24,7 @@ public class KclAstParser {
 
         Program program = JsonUtil.deserializeProgram(specResult.getProgram());
         NodeVisitor nodeVisitor = new NodeVisitor(nodeMap, schemaMap);
-        nodeVisitor.visit(program, "");
+        nodeVisitor.visit(program);
         return new ParseResult(specResult, nodeMap, program, schemaMap);
     }
 
@@ -69,18 +69,17 @@ public class KclAstParser {
         }
 
         @Override
-        public Void visit(Node<?> node, String Id) {
+        public void visit(Node<?> node, String Id) {
             if (node == null)
-                return null;
+                return;
             this.nodeMap.put(node.getId(), node);
-            return super.visit(node, node.getId());
+            super.visit(node, node.getId());
         }
 
         @Override
-        public Void visit(SchemaStmt node, String Id) {
+        public void visit(SchemaStmt node, String Id) {
             this.schemaMap.put(node.getName().getId(), Id);
             super.visit(node, Id);
-            return null;
         }
     }
 

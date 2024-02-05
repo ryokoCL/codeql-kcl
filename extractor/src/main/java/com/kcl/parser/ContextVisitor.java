@@ -5,52 +5,139 @@ import com.kcl.ast.*;
 
 import java.util.List;
 
-public interface ContextVisitor<R, C> {
-    public R visit(Program node, C c);
+public interface ContextVisitor<C> {
+    void visit(Program program);
 
-    public R visit(Module node, C c);
+    void visit(Module module, C c);
 
-    public R visit(List<? extends Node<?>> nodes, C c);
+    void visit(List<? extends Node<?>> listNode, C c);
 
-    public R visit(Node<?> node, C c);
+    void visit(Node<?> node, C c);
 
-    public R visit(Comment node, C c);
+    //stmt
+    void visit(TypeAliasStmt typeAliasStmt, C c);
 
-    public R visit(SchemaStmt node, C c);
+    void visit(ExprStmt exprStmt, C c);
 
-    public R visit(SchemaAttr node, C c);
+    void visit(UnificationStmt unificationStmt, C c);
 
-    public R visit(AssignStmt node, C c);
+    void visit(AssignStmt assignStmt, C c);
 
-    public R visit(SchemaExpr node, C c);
+    void visit(AugAssignStmt augAssignStmt, C c);
 
-    public R visit(ConfigExpr node, C c);
+    void visit(AssertStmt assertStmt, C c);
 
-    public R visit(IdentifierExpr node, C c);
+    void visit(IfStmt ifStmt, C c);
 
-    public R visit(NumberLit node, C c);
+    void visit(ImportStmt importStmt, C c);
 
-    public R visit(StringLit node, C c);
+    void visit(SchemaStmt schemaStmt, C c);
 
-    public R visit(Type node, C c);
+    void visit(SchemaAttr schemaAttr, C c);
 
-    public R visit(BasicType node, C c);
+    void visit(RuleStmt ruleStmt, C c);
 
-    public R visit(Arguments node, C c);
+    //expr
+    void visit(IdentifierExpr identifierExpr, C c);
 
-    public R visit(Keyword node, C c);
+    void visit(UnaryExpr unaryExpr, C c);
 
-    public R visit(ConfigEntry node, C c);
+    void visit(BinaryExpr binaryExpr, C c);
 
-    public R visit(Identifier node, C c);
+    void visit(IfExpr ifExpr, C c);
 
-    public R visit(AugOp node, C c);
+    void visit(SelectorExpr selectorExpr, C c);
 
-    public R visit(NumberLitValue node, C c);
+    void visit(CallExpr callExpr, C c);
 
-    public R visit(NumberBinarySuffix node, C c);
+    void visit(ParenExpr parenExpr, C c);
 
-    public R visit(ConfigEntryOperation node, C c);
+    void visit(QuantExpr quantExpr, C c);
 
-    public R visit(ExprContext node, C c);
+    void visit(ListExpr listExpr, C c);
+
+    void visit(ListIfItemExpr listIfItemExpr, C c);
+
+    void visit(ListComp listComp, C c);
+
+    void visit(StarredExpr starredExpr, C c);
+
+    void visit(DictComp dictComp, C c);
+
+    void visit(ConfigIfEntryExpr configIfEntryExpr, C c);
+
+    void visit(SchemaExpr schemaExpr, C c);
+
+    void visit(ConfigExpr configExpr, C c);
+
+    void visit(CheckExpr checkExpr, C c);
+
+    void visit(LambdaExpr lambdaExpr, C c);
+
+    void visit(Subscript subscript, C c);
+
+    void visit(Compare compare, C c);
+
+    void visit(NumberLit numberLit, C c);
+
+    void visit(StringLit stringLit, C c);
+
+    void visit(NameConstantLit nameConstantLit, C c);
+
+    void visit(JoinedString joinedString, C c);
+
+    void visit(FormattedValue formattedValue, C c);
+
+    void visit(MissingExpr missingExpr, C c);
+
+    //op
+    void visit(UnaryOp op, C c);
+
+    void visit(BinOp op, C c);
+
+    void visit(CmpOp cmpOp, C c);
+
+    void visit(AugOp op, C c);
+
+    void visit(QuantOperation op, C c);
+
+    //type
+    void visit(Type type, C c);
+
+    void visit(AnyType anyType, C c);
+
+    void visit(NamedType namedType, C c);
+
+    void visit(BasicType basicType, C c);
+
+    void visit(ListType listType, C c);
+
+    void visit(DictType dictType, C c);
+
+    void visit(UnionType unionType, C c);
+
+    void visit(FunctionType functionType, C c);
+
+    //other
+    void visit(String node, C c);
+
+    void visit(SchemaConfig schemaConfig, C c);
+
+    void visit(CompClause compClause, C c);
+
+    void visit(ConfigEntry configEntry, C c);
+
+    void visit(NumberBinarySuffix suffix, C c);
+
+    void visit(NumberLitValue numberLitValue, C c);
+
+    void visit(ConfigEntryOperation op, C c);
+
+    void visit(Identifier identifier, C c);
+
+    void visit(ExprContext exprContext, C c);
+
+    void visit(Keyword keyword, C c);
+
+    void visit(Arguments arguments, C c);
 }
