@@ -38,9 +38,19 @@ public class Main implements Runnable {
         if (!Files.exists(sourcePath) || !Files.isDirectory(sourcePath)) {
             throw new UserError("Please specify correct source path.");
         }
+        try {
+            sourcePath = sourcePath.toRealPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         if (!Files.exists(reportPath) || !Files.isDirectory(reportPath)) {
             throw new UserError("Please specify correct report path.");
+        }
+        try {
+            reportPath = reportPath.toRealPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         //for extractor

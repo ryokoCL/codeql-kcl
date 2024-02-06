@@ -228,8 +228,7 @@ public class FileExtractor {
             successful = true;
             return loc;
         } catch (Exception e) {
-            System.out.println(e);
-            return null;
+            throw e;
         } finally {
             if (!successful && trapwriter instanceof CachingTrapWriter)
                 ((CachingTrapWriter) trapwriter).discard();
